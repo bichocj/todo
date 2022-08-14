@@ -9,6 +9,24 @@ const graphQLClient = new GraphQLClient(API_URL, {
   }
 });
 
+export function useGetProfile() {
+  const query = `
+      query {
+        profile {
+          avatar
+          createdAt
+          email
+          fullName
+          type
+          updatedAt    
+        }
+      }
+    `;
+  return useQuery("get-profile", async () => {
+    return graphQLClient.request(query);
+  });
+}
+
 export function useGetTasks() {
   const query = `
       query {
