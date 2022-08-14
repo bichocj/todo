@@ -1,0 +1,84 @@
+// Override default variables before the import
+$bg-color: #2d2f33;
+$dark: #333c36;
+$success: #69a34e;
+$warning: #e5b454;
+$body-bg: #222528;
+
+$card-bg: $bg-color;
+$card-color: #7a7d80;
+
+$list-group-bg: $bg-color;
+$list-group-active-bg: #383034;
+$list-group-color: #7a7d80;
+$list-group-active-color: #c55248;
+
+$secondary: white;
+$primary: #da584b;
+
+:root {
+    $--bs-secondary-rgb: 255, 193, 7;
+    $bs-secondary-rgb: 255, 193, 7;
+}
+
+// Import Bootstrap and its default variables
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-icons/font/bootstrap-icons.scss';
+
+.fw-bold {
+    font-weight: 600 !important;
+}
+
+.bi::before,
+[class^=bi-]::before,
+[class*=" bi-"]::before {
+    font-weight: 600;
+}
+
+.input-group-text {
+    color: inherit !important;
+    background-color: inherit !important;
+    border: 0px;
+}
+
+.form-control {
+    border: 0px;
+    background-color: $bg-color;
+}
+
+.avatar {
+    width: 30px;
+    height: 30px;
+}
+
+.content {
+ //   color: white;
+}
+
+.btn-outline-secondary {
+    border: 0;
+}
+
+.fs-7 {
+    font-size: 14px;
+}
+
+.loader {
+    width: auto;
+    .rotate {
+        animation: rotation 3s infinite linear;
+    }
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(359deg);
+    }
+}
+
+.dropdown-toggle::after {
+    display: none;
+}  
