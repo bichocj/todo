@@ -22,6 +22,7 @@ export function useGetTasks() {
             status
             tags
             assignee {
+                id
                 avatar
                 fullName
             }

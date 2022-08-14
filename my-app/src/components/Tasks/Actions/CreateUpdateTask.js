@@ -45,42 +45,36 @@ const CreateUpdateTask = ({ visible, onClose, tags, refetchTasks, task }) => {
     }
 
     const saveTask = () => {
+        let savingMutation;
         if (!task) {
-            mutate({
-                input: {
-                    ...data,
-                    dueDate: dueDate instanceof Date ? dueDate.toISOString().substr(0, 10) : dueDate
-                }
-            }, {
-                onError: onError,
-                onSuccess: onSuccess
-            })
+            savingMutation = mutate;
         } else {
-            mutateUpdate({
-                input: {
-                    ...data,
-                    dueDate: dueDate instanceof Date ? dueDate.toISOString().substr(0, 10) : dueDate
-                }
-            }, {
-                onError: onError,
-                onSuccess: onSuccess
-            })
+            savingMutation = mutateUpdate;
         }
+        savingMutation({
+            input: {
+                ...data,
+                dueDate: dueDate instanceof Date ? dueDate.toISOString().substr(0, 10) : dueDate
+            }
+        }, {
+            onError: onError,
+            onSuccess: onSuccess
+        })
     }
 
     useEffect(() => {
         if (task) {
             setData({
                 id: task.id,
-                assigneeId: task.assigneeId,
+                assigneeId: task.assignee.id,
                 dueDate: task.dueDate,
                 name: task.name,
                 pointEstimate: task.pointEstimate,
                 status: task.status,
                 tags: task.tags,
-            })
+            });
         }
-    }, [task])
+    }, [task]);
 
     return (
         <div className="modal" tabIndex="-1" style={{ display: visible ? 'inherit' : 'none' }}>
