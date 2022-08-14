@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# RVN Code Challenge by Javier
 
 This project was bootstrapped with [Create React App]
 
