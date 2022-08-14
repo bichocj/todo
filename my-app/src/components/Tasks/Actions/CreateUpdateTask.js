@@ -71,7 +71,14 @@ const CreateUpdateTask = ({ visible, onClose, tags, refetchTasks }) => {
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={onClose}>Cancel</button>
-                        <button type="button" className="btn btn-primary" onClick={saveTask}>Save</button>
+                        <button 
+                            type="button" 
+                            className="btn btn-primary" 
+                            onClick={saveTask}
+                            disabled={isLoading}
+                        >
+                            Save
+                        </button>
                     </div>
                 </div>
             </div>

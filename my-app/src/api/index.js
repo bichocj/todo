@@ -13,6 +13,7 @@ export function useGetTasks() {
   const query = `
       query {
         tasks(input: {  }) {
+            id
             name
             position
             pointEstimate
@@ -54,6 +55,19 @@ export function useCreateTask() {
     createTask(
       input: $input
     ) {    
+      id
+    }
+  }
+  `;
+  return useMutation(async (data) => {
+    return graphQLClient.request(mutation, data);
+  });
+}
+
+export function useDeleteTask() {
+  const mutation = `
+  mutation deleteTask($input: DeleteTaskInput!) {
+    deleteTask(input: $input) {
       id
     }
   }

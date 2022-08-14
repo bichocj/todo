@@ -5,15 +5,15 @@ import { useGetTasks } from '../../api';
 import { useEffect, useState } from 'react';
 
 const Tasks = () => {
-    const { data, isLoading, refetch } = useGetTasks();    
+    const { data, isLoading, refetch } = useGetTasks();
     const [tags, setTags] = useState([]);
     useEffect(() => {
-        if(data) {
+        if (data) {
             const tmpTasks = data.tasks.reduce((prev, current) => {
                 current.tags.forEach(t => {
-                    if(!prev.includes(t)) {
+                    if (!prev.includes(t)) {
                         prev.push(t)
-                    }                    
+                    }
                 });
                 return prev
             }, []);
@@ -21,21 +21,34 @@ const Tasks = () => {
         }
     }, [data]);
 
-    
+    const columns = [
+        { title: 'BACKLOG', status: 'BACKLOG' },
+        { title: 'CANCELLED', status: 'CANCELLED' },
+        { title: 'TODO', status: 'TODO' },
+        { title: 'In Progress', status: 'IN_PROGRESS' },
+        { title: 'Completed', status: 'DONE' },
+    ];
+
     return (
-            <div>
+        <div>
             <Actions tags={tags} refetchTasks={refetch} />
-            { isLoading ? (
+            {isLoading ? (
                 <Loader />
-                ) : (
+            ) : (
                 <div className='row text-white text-bold mt-4 '>
-                    <ColumnCards title={'BACKLOG'} status={'BACKLOG'} tasks={data.tasks} />
-                    <ColumnCards title={'CANCELLED'} status={'CANCELLED'} tasks={data.tasks} />
-                    <ColumnCards title={'TODO'} status={'TODO'} tasks={data.tasks} />
-                    <ColumnCards title={'In Progress'} status={'IN_PROGRESS'} tasks={data.tasks} />
-                    <ColumnCards title={'DONE'} status={'DONE'} tasks={data.tasks} />
+                    {
+                        columns.map((column, i) => (
+                            <ColumnCards
+                                key={`column_${i}`}
+                                title={column.title}
+                                status={column.status}
+                                tasks={data.tasks}
+                                refetchTasks={refetch}
+                            />
+                        ))
+                    }
                 </div>
-                )
+            )
             }
         </div>
     );
