@@ -5,6 +5,7 @@ import {
 import Sidebar from './components/Sidebar';
 import Tasks from './components/Tasks';
 import Profile from './components/Profile';
+import NotFoundPage from './components/pages/NotFoundPage';
 import React from "react";
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Tasks />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>
       </div>
