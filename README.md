@@ -6,6 +6,8 @@ This project was bootstrapped with [Create React App]
 
 In the project directory, you can run:
 
+### `cd my-app`
+### `npm install`
 ### `npm start`
 
 Runs the app in the development mode.\
