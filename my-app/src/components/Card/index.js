@@ -4,9 +4,16 @@ import Tags from './Tags';
 import get from 'lodash/get';
 import { POINT_ESTIMATE } from '../../utils/constants';
 import { useDeleteTask } from '../../api';
+import CreateUpdateTask from "../Tasks/Actions/CreateUpdateTask";
+import { useState } from "react";
+const Card = ({ allTags, task, refetchTasks }) => {
+    const { id, name, tags, position, pointEstimate, dueDate, assignee } = task;
+    const avatar = get(assignee, 'avatar');
+    const fullName = get(assignee, 'fullName', 'Anonumus Boy');
 
-const Card = ({ task, refetchTasks }) => {
-    const { id, name, tags, position, pointEstimate, dueDate, assignee: { avatar, fullName } } = task;
+    const [isShowingModal, setIsShowingModal] = useState(false);
+    const showModal = () => setIsShowingModal(true);
+    const hideModal = () => setIsShowingModal(false);
     const { mutate, isLoading } = useDeleteTask();
     const deleteTask = () => {
         mutate({
@@ -24,8 +31,17 @@ const Card = ({ task, refetchTasks }) => {
             onSuccess: refetchTasks
         })
     }
+
+
     return (
         <div className="card rounded-4 mt-2">
+            <CreateUpdateTask
+                visible={isShowingModal}
+                onClose={hideModal}
+                tags={allTags}
+                refetchTasks={refetchTasks}
+                task={task}
+            />
             <div className="card-body p-0 py-2 text-white px-3">
                 <div className='d-flex justify-content-between'>
                     <span>{name}</span>
@@ -33,7 +49,10 @@ const Card = ({ task, refetchTasks }) => {
                         <div className="dropdown">
                             <i className="bi bi-three-dots dropdown-toggle" data-bs-toggle="dropdown"></i>
                             <ul className="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
-                                <li><button className="dropdown-item"><i className="bi bi-pencil pe-1"></i> Edit</button></li>
+                                <li>
+                                    <button className="dropdown-item" onClick={showModal}>
+                                        <i className="bi bi-pencil pe-1"></i> Edit</button>
+                                    </li>
                                 <li>
                                     <button className="dropdown-item" onClick={deleteTask} disabled={isLoading}>
                                         <i className="bi bi-trash pe-1"></i>
@@ -74,10 +93,12 @@ const Card = ({ task, refetchTasks }) => {
 
 
 Card.defaultProps = {
-    task: []
+    task: [],
+    allTags: [],
 }
 
 Card.propTypes = {
+    allTags: PropTypes.array,
     task: PropTypes.shape(),
     refetchTasks: PropTypes.func,
 }

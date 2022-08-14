@@ -4,14 +4,15 @@ import EstimateDropDown from './EstimateDropDown';
 import UsersDropDown from './UsersDropDown';
 import LabelsDropDown from './LabelsDropDown';
 import DueDateDropDown from './DueDateDropDown';
-import { useCreateTask } from '../../../api';
-import { useState } from 'react';
+import { useCreateTask, useUpdateTask } from '../../../api';
+import { useEffect, useState } from 'react';
 
-const CreateUpdateTask = ({ visible, onClose, tags, refetchTasks }) => {
+const CreateUpdateTask = ({ visible, onClose, tags, refetchTasks, task }) => {
     const { mutate, isLoading } = useCreateTask();
+    const { mutate: mutateUpdate, isLoading: isLoadingUpdate } = useUpdateTask();
     const [data, setData] = useState({
         assigneeId: '',
-        dueDate: '',
+        dueDate: new Date(),
         name: '',
         pointEstimate: '',
         status: 'BACKLOG',
@@ -30,27 +31,56 @@ const CreateUpdateTask = ({ visible, onClose, tags, refetchTasks }) => {
         setData((prev) => ({ ...prev, [field]: value }))
     }
 
-    const saveTask = () => {
-        mutate({
-            input: {
-                ...data,
-                dueDate: dueDate instanceof Date ? dueDate.toISOString().substr(0, 10) : dueDate
-            }
-        }, {
-            onError: (err) => {
-                const firstError = get(err, 
-                    'response.errors.0.extensions.response.message.0', 
-                    'Please fill the form properly'
-                );
-                alert(firstError)
-            },
-            onSuccess: () => {
-                refetchTasks();
-                onClose();
-            }
-        })
+    const onError = (err) => {
+        const firstError = get(err,
+            'response.errors.0.extensions.response.message.0',
+            'Please fill the form properly'
+        );
+        alert(firstError)
+    };
+
+    const onSuccess = () => {
+        refetchTasks();
+        onClose();
     }
 
+    const saveTask = () => {
+        if (!task) {
+            mutate({
+                input: {
+                    ...data,
+                    dueDate: dueDate instanceof Date ? dueDate.toISOString().substr(0, 10) : dueDate
+                }
+            }, {
+                onError: onError,
+                onSuccess: onSuccess
+            })
+        } else {
+            mutateUpdate({
+                input: {
+                    ...data,
+                    dueDate: dueDate instanceof Date ? dueDate.toISOString().substr(0, 10) : dueDate
+                }
+            }, {
+                onError: onError,
+                onSuccess: onSuccess
+            })
+        }
+    }
+
+    useEffect(() => {
+        if (task) {
+            setData({
+                id: task.id,
+                assigneeId: task.assigneeId,
+                dueDate: task.dueDate,
+                name: task.name,
+                pointEstimate: task.pointEstimate,
+                status: task.status,
+                tags: task.tags,
+            })
+        }
+    }, [task])
 
     return (
         <div className="modal" tabIndex="-1" style={{ display: visible ? 'inherit' : 'none' }}>
@@ -71,11 +101,11 @@ const CreateUpdateTask = ({ visible, onClose, tags, refetchTasks }) => {
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={onClose}>Cancel</button>
-                        <button 
-                            type="button" 
-                            className="btn btn-primary" 
+                        <button
+                            type="button"
+                            className="btn btn-primary"
                             onClick={saveTask}
-                            disabled={isLoading}
+                            disabled={isLoading || isLoadingUpdate}
                         >
                             Save
                         </button>

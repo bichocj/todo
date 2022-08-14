@@ -44,6 +44,7 @@ const Tasks = () => {
                                 status={column.status}
                                 tasks={data.tasks}
                                 refetchTasks={refetch}
+                                allTags={tags}
                             />
                         ))
                     }

@@ -64,6 +64,21 @@ export function useCreateTask() {
   });
 }
 
+export function useUpdateTask() {
+  const mutation = `
+  mutation updateTask($input: UpdateTaskInput!) { 
+    updateTask(
+      input: $input
+    ) {    
+      id
+    }
+  }
+  `;
+  return useMutation(async (data) => {
+    return graphQLClient.request(mutation, data);
+  });
+}
+
 export function useDeleteTask() {
   const mutation = `
   mutation deleteTask($input: DeleteTaskInput!) {
