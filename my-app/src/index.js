@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import './custom.scss';
 import App from './App';
@@ -11,8 +12,10 @@ const queryClient = new QueryClient()
 
 root.render(
   <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
         <App />
+      </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>
 );

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { avatarUrl } from '../../../utils/constants';
 
 const Topbar = () => (
@@ -9,8 +10,10 @@ const Topbar = () => (
         </span>
         <input type="text" className="form-control" placeholder='Search'/>
         <span className="input-group-text">
-            <i className="bi bi-bell"></i>
-            <img src={avatarUrl} className="rounded-circle avatar ms-3" alt="avatar" />
+            <Link to="/profile">
+                <i className="bi bi-bell"></i>
+                <img src={avatarUrl} className="rounded-circle avatar ms-3" alt="avatar" />
+            </Link>
         </span>
         </div>
     </div>

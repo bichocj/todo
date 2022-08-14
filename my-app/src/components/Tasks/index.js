@@ -3,6 +3,7 @@ import ColumnCards from '../ColumnCards';
 import Loader from '../Loader';
 import { useGetTasks } from '../../api';
 import { useEffect, useState } from 'react';
+import Topbar from './Topbar';
 
 const Tasks = () => {
     const { data, isLoading, refetch } = useGetTasks();
@@ -30,28 +31,31 @@ const Tasks = () => {
     ];
 
     return (
-        <div>
-            <Actions tags={tags} refetchTasks={refetch} />
-            {isLoading ? (
-                <Loader />
-            ) : (
-                <div className='row text-white text-bold mt-4 '>
-                    {
-                        columns.map((column, i) => (
-                            <ColumnCards
-                                key={`column_${i}`}
-                                title={column.title}
-                                status={column.status}
-                                tasks={data.tasks}
-                                refetchTasks={refetch}
-                                allTags={tags}
-                            />
-                        ))
-                    }
-                </div>
-            )
-            }
-        </div>
+        <>
+            <Topbar />
+            <div>
+                <Actions tags={tags} refetchTasks={refetch} />
+                {isLoading ? (
+                    <Loader />
+                ) : (
+                    <div className='row text-white text-bold mt-4 '>
+                        {
+                            columns.map((column, i) => (
+                                <ColumnCards
+                                    key={`column_${i}`}
+                                    title={column.title}
+                                    status={column.status}
+                                    tasks={data.tasks}
+                                    refetchTasks={refetch}
+                                    allTags={tags}
+                                />
+                            ))
+                        }
+                    </div>
+                )
+                }
+            </div>
+        </>
     );
 };
 
